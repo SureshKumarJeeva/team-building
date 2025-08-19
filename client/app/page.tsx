@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import {saveAs} from "file-saver";
 
 function index(){
   const [file, setFile] = useState<File|null>(null);
-  const [message, setMessage] = useState("Loading");
 
   const organizeGame = async (e:React.FormEvent)=>{
       e.preventDefault();
       if(!file){
-        alert("please select a file");
+        alert("Please select a file");
         return;
       }
       const formData = new FormData();
@@ -18,14 +18,9 @@ function index(){
       const res = await fetch("http://localhost:8080/api/secretsanta",{
         method:"POST",
         body:formData
-      }).then(
-        response => response.json()
-      ).then(
-        data => {
-          console.log(data);
-          setMessage(data.message);
-        }
-    );
+      });
+      const blob = await res.blob();
+      saveAs(blob, "Secret-Santa-Game-Result-"+new Date().getFullYear()+".csv");
   }
   return(
     <>
@@ -43,8 +38,6 @@ function index(){
           <button type="submit" className="border p-2 rounded bg-amber-700  hover:bg-amber-600 cursor-pointer">submit</button>
         </div>
         </form>
-      
-      <div>{message}</div>
     </>
   );
 }
