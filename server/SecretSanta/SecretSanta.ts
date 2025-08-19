@@ -20,25 +20,25 @@ class SecretSanta extends Game{
     }
 
     // check if provided file is in csv format
-    validate(params:any) {
+    validateFile() {
         //check if file is in csv format
-        //check if file is from previous year assignment or just employees list
+        let extension = this.file.getFileFormat();
+        if(extension != "csv"){
+            throw new Error("Invalid file format");
+        }
     }
 
     //function responsible for organizing the game
     organize(){
         try{
+            this.validateFile();
             this.masterList = this.file.getParsedFile();
             this.unassignedList = structuredClone(this.masterList);
 
-            if(this.masterList[0].Secret_Child_Name != null)
-                console.log("secret friend exists");
-            else
-                console.log("secret friend does not exists");
             if(this.assignChild(this.masterList, this.unassignedList))
                 return (this.assignedList);
         }catch(err:any){
-            return err.message;
+            throw new Error(err.message);
         }
     }
 
@@ -46,10 +46,17 @@ class SecretSanta extends Game{
     assignChild(masterList:Array<employeeItem>, unassignedList:Array<employeeItem>){
         try{
         for(const masterItem of masterList){
-            console.log(masterItem);
             for(let i = unassignedList.length - 1; i >= 0; i--){
-                if(masterItem.Employee_EmailID != unassignedList[i].Employee_EmailID 
-                    && masterItem.Secret_Child_EmailID != unassignedList[i].Employee_EmailID){
+                let foundChild = false;
+                if(masterItem.Employee_EmailID != unassignedList[i].Employee_EmailID){
+                    //check if employee list is from previous year assignment and if so check for additional constraint
+                    if(masterItem.Secret_Child_EmailID != null){
+                        if(masterItem.Secret_Child_EmailID != unassignedList[i].Employee_EmailID){
+                            foundChild = true;
+                        }
+                    }else
+                        foundChild = true;
+                    if(foundChild){
                         let newItem:employeeItem = {
                             Employee_Name: masterItem.Employee_Name,
                             Employee_EmailID: masterItem.Employee_EmailID,
@@ -60,9 +67,9 @@ class SecretSanta extends Game{
                         unassignedList.splice(i, 1);
                         break;
                     }
+                }
             }
         }
-        console.log(this.assignedList);
         return true;
         }catch(err:any){
             throw new Error("Error while assigning child: "+err.message);

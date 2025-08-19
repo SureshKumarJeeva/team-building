@@ -20,8 +20,11 @@ export class FileOps{
         return this.file;
     }
 
+    //find the file format/type/extension
     getFileFormat(){
-
+        let fileName = this.file?.originalname;
+        let extension = fileName?.split(".").pop();
+        return extension;
     }
 
     getParsedFile(){

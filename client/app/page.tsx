@@ -6,6 +6,8 @@ import {saveAs} from "file-saver";
 function index(){
   const [file, setFile] = useState<File|null>(null);
 
+  //on file submit handler
+  //process the input file and arrive at the result
   const organizeGame = async (e:React.FormEvent)=>{
       e.preventDefault();
       if(!file){
@@ -19,8 +21,13 @@ function index(){
         method:"POST",
         body:formData
       });
-      const blob = await res.blob();
-      saveAs(blob, "Secret-Santa-Game-Result-"+new Date().getFullYear()+".csv");
+      if(res.status != 400){
+        const blob = await res.blob();
+        saveAs(blob, "Secret-Santa-Game-Result-"+new Date().getFullYear()+".csv");
+      }else{
+        const response = await res.json();
+        console.log(response);
+      }
   }
   return(
     <>

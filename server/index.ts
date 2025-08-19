@@ -22,7 +22,6 @@ app.post("/api/secretsanta", upload.single("file"), (req:Request, res:Response)=
         }
         const secretSanta_game = new secretSanta(req.file);
         let response = organizeGame(secretSanta_game);
-        // res.json({message:"new list", data:response});
 
         const fields = ["Employee_Name", "Employee_EmailID", "Secret_Child_Name", "Secret_Child_EmailID"];
         const json2csvparser = new Parser({fields});
@@ -32,7 +31,7 @@ app.post("/api/secretsanta", upload.single("file"), (req:Request, res:Response)=
         res.send(csv);
 
     }catch(err:any){
-        console.log("Error while processing the secretsanta Game: "+err.stack)
+        res.status(400).json({message: "Error while processing the secretsanta Game: "+err.message});
     }
 });
  
@@ -40,10 +39,12 @@ app.listen(PORT, ()=>{
     console.log(`server started at port ${PORT}`);
 });
 
+
+//calling the organize function to initialize the organize function for any game
 function organizeGame(g:Games){
     try{
         return g.organize();
     }catch(err:any){
-        console.log("Error while organizing a game: "+err.message)
+        throw new Error(err.message);
     }
 }
