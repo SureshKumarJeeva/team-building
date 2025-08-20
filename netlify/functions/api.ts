@@ -7,6 +7,7 @@ const multer_file = require('multer');
 const fs = require("fs");
 const csv = require("csv-parser");
 const { Parser } = require('json2csv');
+const Game = require("../../server/Game");
 
 import { Request, Response } from "express";
 const PORT = "8080";
