@@ -2,7 +2,7 @@ import express from 'express';
 import serverless from "serverless-http";
 const app = express();
 const cors = require('cors');
-const secretSanta = require("./SecretSanta/SecretSanta");
+const secretSanta = require("../../server/SecretSanta/SecretSanta");
 const multer_file = require('multer');
 const fs = require("fs");
 const csv = require("csv-parser");
