@@ -15,7 +15,7 @@ app.use(cors());
 
 const upload = multer_file({storage:multer_file.memoryStorage()});
 
-app.post("/api/secretsanta", upload.single("file"), (req:Request, res:Response)=>{
+app.post("/secretsanta", upload.single("file"), (req:Request, res:Response)=>{
     try{
         //check if user uploaded a file
         if(!req.file){
