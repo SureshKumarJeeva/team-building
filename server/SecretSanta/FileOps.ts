@@ -3,6 +3,7 @@ Class holding functionality for file operations
 */
 const { parse } = require('csv-parse/sync');
 import { employeeItem } from "./utils";
+import { Multer } from "multer";
 
 export class FileOps{
 
