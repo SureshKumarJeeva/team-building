@@ -17,7 +17,7 @@ function index(){
       const formData = new FormData();
       formData.append("file", file);
 
-      const res = await fetch("/netlify/functions/secretsanta",{
+      const res = await fetch("/.netlify/functions/api/secretsanta",{
         method:"POST",
         body:formData
       });
